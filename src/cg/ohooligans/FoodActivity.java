@@ -1,0 +1,24 @@
+package cg.ohooligans;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+
+/**
+ * @author Sergey Mashkov
+ */
+public class FoodActivity extends Activity {
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.items);
+
+        final ArrayList<Item> items = new ArrayList<Item>();
+
+        new ItemsHandler(items, Category.FOOD).handle(getResources(), R.raw.food);
+
+        ((ListView) findViewById(R.id.items)).setAdapter(new ItemAdapter(items, MainActivity.getMgr()));
+    }
+
+}

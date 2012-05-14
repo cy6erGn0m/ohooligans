@@ -2,19 +2,19 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
+              android:layout_height="32dp"
                 >
 
     <TextView android:id="@+id/caption"
               android:layout_width="wrap_content"
-              android:layout_height="fill_parent"
+              android:layout_height="32dp"
               android:gravity="center_vertical"
               android:text="zzz"
               />
 
     <Button android:id="@+id/plusButton"
             android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
+            android:layout_height="32dp"
             android:layout_alignParentRight="true"
             android:text="+"
             android:onClick="plus   Clicked"
@@ -22,7 +22,7 @@
 
     <Button android:id="@+id/minusButton"
             android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
+            android:layout_height="32dp"
             android:layout_toLeftOf="@id/plusButton"
             android:text="-"
             android:onClick="minusClicked"
@@ -30,7 +30,7 @@
 
     <TextView android:id="@+id/count"
               android:layout_width="wrap_content"
-              android:layout_height="fill_parent"
+              android:layout_height="32dp"
               android:layout_toLeftOf="@id/minusButton"
               android:gravity="center_vertical"
               android:text="0"

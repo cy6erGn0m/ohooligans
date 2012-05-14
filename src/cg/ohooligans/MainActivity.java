@@ -36,15 +36,6 @@ public class MainActivity extends TabActivity {
         tabHost.addTab(foods);
         getTabHost().addTab(drink);
         getTabHost().addTab(result);
-
-        getTabHost().setOnTabChangedListener(new TabHost.OnTabChangeListener() {
-            @Override
-            public void onTabChanged(String s) {
-                if ("result".equals(s)) {
-
-                }
-            }
-        });
     }
 
     public static OrderManager getMgr() {

@@ -10,7 +10,10 @@ import org.xml.sax.SAXException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Sergey Mashkov aka cy6erGn0m
@@ -33,9 +36,11 @@ public class ItemDownloadTask extends AsyncTask<String, Void, List<Item>> {
 
             return items;
         } catch (IOException e) {
-            throw new IllegalStateException(e);
+            Logger.getLogger(ItemDownloadTask.class.getName()).log(Level.SEVERE, "Failed to load items list", e);
+            return Collections.emptyList();
         } catch (SAXException e) {
-            throw new IllegalStateException(e);
+            Logger.getLogger(ItemDownloadTask.class.getName()).log(Level.SEVERE, "Failed to load items list", e);
+            return Collections.emptyList();
         } finally {
             if (is != null) {
                 try {

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TabHost;
+import android.widget.Toast;
 
 import java.util.Collections;
 import java.util.List;
@@ -50,9 +51,13 @@ public class MainActivity extends TabActivity {
     protected void onPostCreate(Bundle icicle) {
         super.onPostCreate(icicle);
 
-        allItems = new DbHelper(this).loadItems(null);
-        if (allItems.isEmpty()) {
-            refreshItems();
+        try {
+            allItems = new DbHelper(this).loadItems(null);
+            if (allItems.isEmpty()) {
+                refreshItems();
+            }
+        } catch (Throwable t) {
+            Toast.makeText(this, t.getClass().getName() + ": " + t.getMessage(), 10000);
         }
     }
 

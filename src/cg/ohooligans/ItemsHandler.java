@@ -1,13 +1,9 @@
 package cg.ohooligans;
 
-import android.content.res.Resources;
-import android.util.Xml;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 
 /**
@@ -20,30 +16,8 @@ class ItemsHandler extends DefaultHandler {
     private StringBuilder sb;
     private final ArrayList<Item> items;
 
-    @Deprecated
-    ItemsHandler(ArrayList<Item> items, Category category) {
-        this.items = items;
-    }
-
     ItemsHandler(ArrayList<Item> items) {
         this.items = items;
-    }
-
-    public void handle(Resources res, int id) {
-        InputStream is = null;
-        try {
-            is = res.openRawResource(id);
-            Xml.parse(is, Xml.Encoding.UTF_8, this);
-        } catch (IOException e) {
-            throw new IllegalStateException(e);
-        } catch (SAXException e) {
-            throw new IllegalStateException(e);
-        } finally {
-            try {
-                if (is != null) is.close();
-            } catch (IOException ignore) {
-            }
-        }
     }
 
     @Override

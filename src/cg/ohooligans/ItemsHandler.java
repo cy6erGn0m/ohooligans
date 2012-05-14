@@ -16,13 +16,17 @@ import java.util.ArrayList;
 class ItemsHandler extends DefaultHandler {
 
     private int price;
+    private Category category;
     private StringBuilder sb;
     private final ArrayList<Item> items;
-    private final Category category;
 
-    public ItemsHandler(ArrayList<Item> items, Category category) {
+    @Deprecated
+    ItemsHandler(ArrayList<Item> items, Category category) {
         this.items = items;
-        this.category = category;
+    }
+
+    ItemsHandler(ArrayList<Item> items) {
+        this.items = items;
     }
 
     public void handle(Resources res, int id) {
@@ -47,6 +51,7 @@ class ItemsHandler extends DefaultHandler {
         if (qName.equals("item")) {
             sb = new StringBuilder(64);
             price = Integer.parseInt(attributes.getValue("price"));
+            category = Category.valueOf(attributes.getValue("cat"));
         }
     }
 

@@ -18,12 +18,6 @@ import java.util.List;
  */
 public class ItemDownloadTask extends AsyncTask<String, Void, List<Item>> {
 
-    private final Category category;
-
-    public ItemDownloadTask(Category category) {
-        this.category = category;
-    }
-
     @Override
     protected List<Item> doInBackground(String... urls) {
         DefaultHttpClient client = new DefaultHttpClient();
@@ -35,7 +29,7 @@ public class ItemDownloadTask extends AsyncTask<String, Void, List<Item>> {
             is = response.getEntity().getContent();
 
             ArrayList<Item> items = new ArrayList<Item>(64);
-            Xml.parse(is, Xml.Encoding.UTF_8, new ItemsHandler(items, category));
+            Xml.parse(is, Xml.Encoding.UTF_8, new ItemsHandler(items));
 
             return items;
         } catch (IOException e) {

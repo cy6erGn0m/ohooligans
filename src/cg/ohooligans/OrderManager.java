@@ -42,6 +42,10 @@ public class OrderManager {
         return c == 0;
     }
 
+    public void clear() {
+        counters.clear();
+    }
+
     public boolean isBusinessLunch() {
         return businessLunch;
     }

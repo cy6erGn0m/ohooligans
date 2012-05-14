@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items>
+    <item price="220" cat="FOOD">Эгейский салат</item>
+    <item price="250" cat="FOOD">Ирландский салат</item>
+
+    <item price="260" cat="FOOD">Ирландская лепёшка</item>
+    <item price="290" cat="FOOD">Картофельный пирог</item>
+    <item price="360" cat="FOOD">Чили кон Карне</item>
+    <item price="340" cat="FOOD">Ирландский завтрак</item>
+    <item price="260" cat="FOOD">Рубленая котлета</item>
+    <item price="330" cat="FOOD">1/2 цыплёнка</item>
+    <item price="680" cat="FOOD">Классический стейк</item>
+    <item price="680" cat="FOOD">Перечый стейк</item>
+
+    <item price="260" cat="DRINKS">Гинесс</item>
+    <item price="220" cat="DRINKS">Дабл Шоколад</item>
+    <item price="240" cat="DRINKS">Делириум Ноктюрнум</item>
+    <item price="260" cat="DRINKS">Килкенни</item>
+    <item price="220" cat="DRINKS">Янг'с</item>
+    <item price="280" cat="DRINKS">Бургонь де Фландерс</item>
+    <item price="150" cat="DRINKS">Бургонь де Фландерс 1/2</item>
+</items>

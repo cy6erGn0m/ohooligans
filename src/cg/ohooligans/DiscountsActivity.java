@@ -36,8 +36,8 @@ public class DiscountsActivity extends Activity {
     }
 
     private void updateView() {
-        int currentDiscount = MainActivity.getMgr().getDiscount();
-        boolean businessLunch = MainActivity.getMgr().isBusinessLunch();
+        int currentDiscount = getMainActivity().getMgr().getDiscount();
+        boolean businessLunch = getMainActivity().getMgr().isBusinessLunch();
 
         ((CheckBox)findViewById(R.id.businessLunch)).setChecked(businessLunch);
         int id;
@@ -70,7 +70,11 @@ public class DiscountsActivity extends Activity {
                 break;
         }
 
-        MainActivity.getMgr().setBusinessLunch(businessLunch);
-        MainActivity.getMgr().setDiscount(currentDiscount);
+        getMainActivity().getMgr().setBusinessLunch(businessLunch);
+        getMainActivity().getMgr().setDiscount(currentDiscount);
+    }
+
+    private MainActivity getMainActivity() {
+        return (MainActivity) getParent();
     }
 }

@@ -16,7 +16,7 @@ import java.util.List;
 public class DbHelper extends SQLiteOpenHelper {
 
     public DbHelper(Context context) {
-        super(context, "OHDatabase", null, 2);
+        super(context, "OHDatabase", null, 3);
     }
 
     @Override
@@ -32,6 +32,7 @@ public class DbHelper extends SQLiteOpenHelper {
             for (; i < i1; ++i) {
                 switch (i) {
                     case 1:
+                    case 2:
                         db.delete("ITEMS", null, null);
                         break;
                 }
@@ -65,13 +66,12 @@ public class DbHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void replaceItems(Category category, List<Item> items) {
-        String deleteSql = "DELETE FROM ITEMS WHERE CATEGORY = '" + category.name() + "'";
+    public void replaceItems(List<Item> items) {
         SQLiteDatabase db = getWritableDatabase();
         try {
             db.beginTransaction();
 
-            db.rawQuery(deleteSql, null).close();
+            db.delete("ITEMS", null, null);
 
             ContentValues values = new ContentValues();
             for (Item item : items) {

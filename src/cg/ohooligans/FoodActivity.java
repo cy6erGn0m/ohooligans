@@ -5,6 +5,6 @@ package cg.ohooligans;
  */
 public class FoodActivity extends ItemsActivity {
     public FoodActivity() {
-        super("http://files.sergey-mashkov.net/food.xml", Category.FOOD);
+        super(Category.FOOD);
     }
 }

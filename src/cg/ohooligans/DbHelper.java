@@ -5,8 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -16,12 +18,13 @@ import java.util.List;
 public class DbHelper extends SQLiteOpenHelper {
 
     public DbHelper(Context context) {
-        super(context, "OHDatabase", null, 3);
+        super(context, "OHDatabase", null, 4);
     }
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL("CREATE TABLE ITEMS (NAME TEXT, PRICE INTEGER, CATEGORY TEXT)");
+        sqLiteDatabase.execSQL("CREATE TABLE FAVORITES (NAME TEXT)");
     }
 
     @Override
@@ -35,6 +38,9 @@ public class DbHelper extends SQLiteOpenHelper {
                     case 2:
                         db.delete("ITEMS", null, null);
                         break;
+                    case 3:
+                        db.execSQL("CREATE TABLE FAVORITES (NAME TEXT)");
+                        break;
                 }
             }
 
@@ -44,7 +50,7 @@ public class DbHelper extends SQLiteOpenHelper {
         }
     }
 
-    public List<Item> loadItems(Category category) {
+    public List<Item> loadItems(@Nullable Category category) {
         String sql = "SELECT NAME, PRICE, CATEGORY FROM ITEMS";
         if (category != null) {
             sql += " WHERE CATEGORY = '" + category.name() + "'";
@@ -66,6 +72,25 @@ public class DbHelper extends SQLiteOpenHelper {
         }
     }
 
+    public List<String> loadFavorites() {
+        SQLiteDatabase db = getReadableDatabase();
+        try {
+            Cursor c = db.query("FAVORITES", new String[] {"NAME"}, null, new String[0], null, null, null);
+            try {
+                ArrayList<String> items = new ArrayList<String>();
+                while (c.moveToNext()) {
+                    items.add(c.getString(0));
+                }
+
+                return items;
+            } finally {
+                c.close();
+            }
+        } finally {
+            db.close();
+        }
+    }
+
     public void replaceItems(List<Item> items) {
         SQLiteDatabase db = getWritableDatabase();
         try {
@@ -73,7 +98,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
             db.delete("ITEMS", null, null);
 
-            ContentValues values = new ContentValues();
+            ContentValues values = new ContentValues(4);
             for (Item item : items) {
                 values.put("NAME", item.getTitle());
                 values.put("PRICE", item.getPrice());
@@ -85,6 +110,25 @@ public class DbHelper extends SQLiteOpenHelper {
         } finally {
             db.endTransaction();
             db.close();
+        }
+    }
+
+    public void replaceFavorites(Collection<Item> favorites) {
+        SQLiteDatabase db = getWritableDatabase();
+        try {
+            db.beginTransaction();
+
+            db.delete("FAVORITES", null, null);
+            ContentValues values = new ContentValues(1);
+            for (Item item : favorites) {
+                values.put("NAME", item.getTitle());
+
+                db.insert("FAVORITES", null, values);
+            }
+
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
         }
     }
 }

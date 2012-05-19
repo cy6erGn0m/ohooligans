@@ -9,9 +9,8 @@ import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,10 +18,10 @@ import java.util.logging.Logger;
  * @author Sergey Mashkov aka cy6erGn0m
  * @since 14.05.12
  */
-public class ItemDownloadTask extends AsyncTask<String, Void, List<Item>> {
+public class ItemDownloadTask extends AsyncTask<String, Void, HooligansMenu> {
 
     @Override
-    protected List<Item> doInBackground(String... urls) {
+    protected HooligansMenu doInBackground(String... urls) {
         DefaultHttpClient client = new DefaultHttpClient();
         HttpGet get = new HttpGet(urls[0]);
         InputStream is = null;
@@ -31,16 +30,18 @@ public class ItemDownloadTask extends AsyncTask<String, Void, List<Item>> {
             HttpResponse response = client.execute(get);
             is = response.getEntity().getContent();
 
-            ArrayList<Item> items = new ArrayList<Item>(64);
-            Xml.parse(is, Xml.Encoding.UTF_8, new ItemsHandler(items));
+            ItemsHandler handler = new ItemsHandler();
+            Xml.parse(is, Xml.Encoding.UTF_8, handler);
+            List<Item> items = handler.getItems();
+            Set<Item> defaultFavorites = handler.getFavs();
 
-            return items;
+            return new HooligansMenu(items, defaultFavorites);
         } catch (IOException e) {
             Logger.getLogger(ItemDownloadTask.class.getName()).log(Level.SEVERE, "Failed to load items list", e);
-            return Collections.emptyList();
+            return HooligansMenu.empty();
         } catch (SAXException e) {
             Logger.getLogger(ItemDownloadTask.class.getName()).log(Level.SEVERE, "Failed to load items list", e);
-            return Collections.emptyList();
+            return HooligansMenu.empty();
         } finally {
             if (is != null) {
                 try {

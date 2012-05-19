@@ -9,14 +9,15 @@ import android.view.MenuItem;
 import android.widget.TabHost;
 import android.widget.Toast;
 
-import java.util.Collections;
+import java.util.Collection;
 import java.util.List;
 
 public class MainActivity extends TabActivity {
 
-    public static final String ITEMS_URL = "http://files.sergey-mashkov.net/full.xml";
-    private final OrderManager mgr = new OrderManager();
-    private List<Item> allItems = Collections.emptyList();
+    public static final String ITEMS_URL = "http://files.sergey-mashkov.net/full.xml.gz";
+
+    private OrderManager mgr = new OrderManager();
+    private HooligansMenu menu = HooligansMenu.empty();
 
     /** Called when the activity is first created. */
     @Override
@@ -52,7 +53,10 @@ public class MainActivity extends TabActivity {
         super.onPostCreate(icicle);
 
         try {
-            allItems = new DbHelper(this).loadItems(null);
+            List<Item> allItems = new DbHelper(this).loadItems(null);
+            List<String> favorites = new DbHelper(this).loadFavorites();
+
+            this.menu = HooligansMenu.create(allItems, favorites);
             if (allItems.isEmpty()) {
                 refreshItems();
             }
@@ -90,10 +94,13 @@ public class MainActivity extends TabActivity {
         final ProgressDialog p = new ProgressDialog(this);
         new ItemDownloadTask() {
             @Override
-            protected void onPostExecute(List<Item> items) {
-                new DbHelper(MainActivity.this).replaceItems(items);
-                allItems = items;
-                reset();
+            protected void onPostExecute(HooligansMenu menu) {
+                new DbHelper(MainActivity.this).replaceItems(menu.getItems());
+                new DbHelper(MainActivity.this).replaceFavorites(menu.getFavorites());
+
+                MainActivity.this.menu = menu;
+
+                updateCurrent();
                 p.hide();
             }
         }.execute(ITEMS_URL);
@@ -107,7 +114,11 @@ public class MainActivity extends TabActivity {
     }
 
     public List<Item> getAllItems() {
-        return allItems;
+        return menu.getItems();
+    }
+
+    public Collection<Item> getFavorites() {
+        return menu.getFavorites();
     }
 
     public void updateCurrent() {

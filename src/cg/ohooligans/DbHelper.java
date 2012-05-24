@@ -91,6 +91,25 @@ public class DbHelper extends SQLiteOpenHelper {
         }
     }
 
+    public void addFavorite(String name) {
+        SQLiteDatabase db = getWritableDatabase();
+        try {
+            db.beginTransaction();
+            ContentValues values = new ContentValues(1);
+            values.put("NAME", name);
+
+            db.insert("FAVORITES", null, values);
+
+            db.setTransactionSuccessful();
+        } finally {
+            try {
+                db.endTransaction();
+            } finally {
+                db.close();
+            }
+        }
+    }
+
     public void replaceItems(List<Item> items) {
         SQLiteDatabase db = getWritableDatabase();
         try {
@@ -129,6 +148,7 @@ public class DbHelper extends SQLiteOpenHelper {
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
+            db.close();
         }
     }
 }

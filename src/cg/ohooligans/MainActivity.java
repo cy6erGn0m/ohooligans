@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.widget.TabHost;
 import android.widget.Toast;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -80,9 +81,38 @@ public class MainActivity extends TabActivity {
             case R.id.resetMenuItem:
                 reset();
                 return true;
+            case R.id.addItem:
+                if (isValidCategoryTab()) {
+                    Intent intent = new Intent(this, ItemAddActivity.class);
+                    intent.putExtra("category", getCurrentCategory().name());
+                    startActivityForResult(intent, 0);
+                }
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (data != null) {
+            String itemTitle = (String)data.getExtras().get("item");
+            if (itemTitle != null) {
+                Item item = menu.find(itemTitle);
+                if (item != null) {
+                    if (!menu.getFavorites().contains(item)) {
+                        new DbHelper(this).addFavorite(item.getTitle());
+                        menu.getFavorites().add(item);
+
+                        getMgr().increase(item);
+
+                        updateCurrent();
+                    }
+                }
+            }
+        }
     }
 
     private void reset() {
@@ -98,7 +128,7 @@ public class MainActivity extends TabActivity {
                 new DbHelper(MainActivity.this).replaceItems(menu.getItems());
                 new DbHelper(MainActivity.this).replaceFavorites(menu.getFavorites());
 
-                MainActivity.this.menu = menu;
+                MainActivity.this.menu = MainActivity.this.menu.mergeWithNewer(menu);
 
                 updateCurrent();
                 p.hide();
@@ -125,5 +155,21 @@ public class MainActivity extends TabActivity {
         if (getCurrentActivity() instanceof UpdatableActivity) {
             ((UpdatableActivity)getCurrentActivity()).update();
         }
+    }
+
+    public boolean isValidCategoryTab() {
+        String tab = getTabHost().getCurrentTabTag();
+        return Arrays.asList("foods", "drink").indexOf(getTabHost().getCurrentTabTag()) != -1;
+    }
+
+    public Category getCurrentCategory() {
+        String tab = getTabHost().getCurrentTabTag();
+        if ("foods".equals(tab)) {
+            return Category.FOOD;
+        } else if ("drink".equals(tab)) {
+            return Category.DRINKS;
+        }
+
+        throw new IllegalStateException("Invalid tab");
     }
 }

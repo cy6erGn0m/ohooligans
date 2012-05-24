@@ -25,5 +25,6 @@
         <activity android:name=".FoodActivity" android:label="foods"/>
         <activity android:name=".ResultsActivity" android:label="results"/>
         <activity android:name=".DrinksActivity" android:label="drinks"/>
+        <activity android:name=".ItemAddActivity" android:label="itemAdd"/>
     </application>
 </manifest> 

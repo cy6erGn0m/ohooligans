@@ -65,4 +65,14 @@ public class HooligansMenu {
 
         return result;
     }
+
+    public Item find(String title) {
+        for (Item item : items) {
+            if (title.equals(item.getTitle())) {
+                return item;
+            }
+        }
+
+        return null;
+    }
 }

@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author Sergey Mashkov
  */
-public class Item {
+public class Item implements Comparable<Item> {
     private final String title;
     private final int price;
     private final Category category;
@@ -56,5 +56,10 @@ public class Item {
     @Override
     public int hashCode() {
         return title.hashCode();
+    }
+
+    @Override
+    public int compareTo(Item item) {
+        return this.title.compareToIgnoreCase(item.title);
     }
 }

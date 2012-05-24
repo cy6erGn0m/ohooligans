@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -14,7 +15,6 @@ import java.util.List;
 public class ItemsActivity extends Activity implements UpdatableActivity {
 
     private final Category category;
-    private List<Item> items;
 
     public ItemsActivity(Category category) {
         this.category = category;
@@ -27,8 +27,15 @@ public class ItemsActivity extends Activity implements UpdatableActivity {
 
     @Override
     public void update() {
-        items = getMainActivity().getAllItems();
-        setItems();
+        ArrayList<Item> filtered = new ArrayList<Item>(256);
+        for (Item item : getMainActivity().getFavorites()) {
+            if (item.getCategory() == category) {
+                filtered.add(item);
+            }
+        }
+        Collections.sort(filtered);
+
+        updateItems(filtered);
     }
 
     @Override
@@ -43,16 +50,6 @@ public class ItemsActivity extends Activity implements UpdatableActivity {
         super.onPostResume();
 
         update();
-    }
-
-    private void setItems() {
-        ArrayList<Item> filtered = new ArrayList<Item>(items.size());
-        for (Item item : items) {
-            if (item.getCategory() == category) {
-                filtered.add(item);
-            }
-        }
-        updateItems(filtered);
     }
 
     private void updateItems(List<Item> items) {

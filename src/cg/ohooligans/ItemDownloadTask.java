@@ -7,12 +7,14 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.xml.sax.SAXException;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.zip.GZIPInputStream;
 
 /**
  * @author Sergey Mashkov aka cy6erGn0m
@@ -29,9 +31,10 @@ public class ItemDownloadTask extends AsyncTask<String, Void, HooligansMenu> {
         try {
             HttpResponse response = client.execute(get);
             is = response.getEntity().getContent();
+            GZIPInputStream gzipInputStream = new GZIPInputStream(new BufferedInputStream(is));
 
             ItemsHandler handler = new ItemsHandler();
-            Xml.parse(is, Xml.Encoding.UTF_8, handler);
+            Xml.parse(gzipInputStream, Xml.Encoding.UTF_8, handler);
             List<Item> items = handler.getItems();
             Set<Item> defaultFavorites = handler.getFavs();
 

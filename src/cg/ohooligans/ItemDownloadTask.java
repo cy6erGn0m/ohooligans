@@ -36,9 +36,9 @@ public class ItemDownloadTask extends AsyncTask<String, Void, HooligansMenu> {
             ItemsHandler handler = new ItemsHandler();
             Xml.parse(gzipInputStream, Xml.Encoding.UTF_8, handler);
             List<Item> items = handler.getItems();
-            Set<Item> defaultFavorites = handler.getFavs();
+            Set<String> defaultFavorites = handler.getFavs();
 
-            return new HooligansMenu(items, defaultFavorites);
+            return HooligansMenu.create(items, defaultFavorites);
         } catch (IOException e) {
             Logger.getLogger(ItemDownloadTask.class.getName()).log(Level.SEVERE, "Failed to load items list", e);
             return HooligansMenu.empty();

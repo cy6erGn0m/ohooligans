@@ -21,7 +21,7 @@ class ItemsHandler extends DefaultHandler {
     private StringBuilder sb;
     private boolean favorite;
     private final List<Item> items = new ArrayList<Item>(384);
-    private final Set<Item> favs = new HashSet<Item>();
+    private final Set<String> favs = new HashSet<String>();
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
@@ -48,7 +48,7 @@ class ItemsHandler extends DefaultHandler {
             Item item = new Item(sb.toString(), price, category);
             items.add(item);
             if (favorite) {
-                favs.add(item);
+                favs.add(item.getTitle());
             }
 
             sb = null;
@@ -59,7 +59,7 @@ class ItemsHandler extends DefaultHandler {
         return items;
     }
 
-    public Set<Item> getFavs() {
+    public Set<String> getFavs() {
         return favs;
     }
 }

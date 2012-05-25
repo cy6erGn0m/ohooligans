@@ -59,6 +59,9 @@ public class OrderManager {
     }
 
     public void setDiscount(int discount) {
+        if (discount < 0 || discount > 100) {
+            throw new IllegalArgumentException("discount should be percentage");
+        }
         this.discountCard = discount;
     }
 

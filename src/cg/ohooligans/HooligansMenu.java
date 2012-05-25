@@ -12,7 +12,7 @@ public class HooligansMenu {
     private final List<Item> items;
     private final Set<Item> favorites = new HashSet<Item>(256);
 
-    public HooligansMenu(List<Item> items, Set<Item> favorites) {
+    private HooligansMenu(List<Item> items, Set<Item> favorites) {
         if (items == null) {
             throw new IllegalArgumentException("items should not be null");
         }
